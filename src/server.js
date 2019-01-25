@@ -10,21 +10,27 @@ const port = process.env.PORT || 5000
 
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const autoIncrement = require('mongoose-auto-increment')
+
 mongoose.connect('mongodb://localhost:27017/vannovervakning', {useNewUrlParser:true})
+autoIncrement.initialize(mongoose)
 
 const sensorReadingSchema = new Schema({
-  _id: Number,
+  // The field below is Primary Key and is automatically generated
+  // _id: Number,
   nodeId: Number,
   type: String,
   value: Number,
   time: {
     type: Date,
     default: Date.now,
-    required: "rewortwe"
+    required: "Time cannot be blank."
   }
 }, {
   collection: "readings"
 })
+
+sensorReadingSchema.plugin(autoIncrement.plugin, 'sensorReading')
 
 var sensorReading = mongoose.model('sensorReading', sensorReadingSchema)
 
