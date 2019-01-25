@@ -1,0 +1,15 @@
+{
+ "name": "node-api",
+ "author": "Leik Lima-Eriksen",
+ "version": "1.0.0",
+ "main": "./src/server.js",
+ "license": "MIT",
+ "scripts": {
+  "start": "node ./src/server.js"
+ },
+ "dependencies": {
+  "body-parser": "^1.18.3",
+  "express": "^4.16.4",
+  "mongoose": "^5.4.6"
+ }
+}
