@@ -1,7 +1,7 @@
 // https://stackoverflow.com/questions/40730604/mongoose-find-with-multiple-ids-that-are-the-same?rq=1
 // https://stackoverflow.com/questions/36552395/query-multiple-date-ranges-in-mongoose
 
-
+const validReadingTypes = ['BATTERY', 'TEMPERATURE', 'HUMIDITY', 'PH']
 const express = require('express')
 const bodyParser = require('body-parser')
 const api = express()
@@ -66,23 +66,45 @@ api.get('/api/node/:nodeId?', (req, res) => {
 
 
 
-api.get('/api/sensorReadings/:nodeId/:param?/:fromTimestamp?/:toTimestamp?', (req, res) => {
+api.get('/api/sensorReadings/:nodeId/:fromTimestamp?/:toTimestamp?', (req, res) => {
   // GET sensor readings
   // No timestamps specified returns the latest reading.
 
-// Possible solution
-  sensorReading.find({nodeId: req.params.nodeId,
-    $or: [
-      { // range 1
-        time: { '$gte': new Date(parseInt(req.params.fromTimestamp)), '$lt': new Date(parseInt(req.params.toTimestamp)) }
-      },
-    ]
-    }, function(err, node){
-    if (err) {
-      res.send(err);
+  var query = {
+    nodeId: req.params.nodeId
+  }
+
+  if(req.params.fromTimestamp) {
+    query.$or = [{
+      time: {'$gte': new Date(parseInt(req.params.fromTimestamp))}
+    }]
+    
+    if(req.params.toTimestamp) {
+      query.$or[0].time.$lt = new Date(parseInt(req.params.toTimestamp))
     }
-    res.json(node);
-    });
+  }
+
+
+  if(req.query.types) {
+    // User has specified which types of readings he wants
+    var types = []
+    types = req.query.types.split(',')
+
+    for(var i = 0; i < types.length; i++) {
+      // Validate types
+      if(!validReadingTypes.includes(types[i])) {
+        res.send('ERR_ILLEGAL_READINGS_TYPE')
+      }
+    }
+    query.type = types
+  }
+ 
+  sensorReading.find(query, function(err, node){
+    if (err) {
+      res.send(err)
+    }
+    res.json(node)
+    })
 })
 
 
