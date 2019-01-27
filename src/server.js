@@ -69,10 +69,18 @@ api.get('/api/node/:nodeId?', (req, res) => {
 api.get('/api/sensorReadings/:nodeId/:fromTimestamp?/:toTimestamp?', (req, res) => {
   // GET sensor readings
   // No timestamps specified returns the latest reading.
+  const returnFields = {
+    _id: 0,
+    type: 1,
+    value: 1,
+    time: 1
+  }
 
   var query = {
     nodeId: req.params.nodeId
   }
+
+  var result = { nodeId: parseInt(req.params.nodeId) }
 
   if(req.params.fromTimestamp) {
     query.$or = [{
@@ -99,11 +107,18 @@ api.get('/api/sensorReadings/:nodeId/:fromTimestamp?/:toTimestamp?', (req, res) 
     query.type = types
   }
  
-  sensorReading.find(query, function(err, node){
+  sensorReading.find(query, returnFields, function(err, response){
     if (err) {
       res.send(err)
     }
-    res.json(node)
+    result.data = {}
+    for(var i = 0; i < response.length; i++) {
+      // Create array if not exists
+      result.data[response[i].type] = Array.isArray(result.data[response[i].type]) ? result.data[response[i].type] : [];
+
+      result.data[response[i].type].push({value: response[i].value, time: response[i].time})
+    }
+    res.json(result)
     })
 })
 
