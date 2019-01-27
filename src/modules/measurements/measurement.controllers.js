@@ -23,7 +23,7 @@ export async function listMeasurements(req, res) {
       result.data[measurement.type] = Array.isArray(result.data[measurement.type]) ?
                                           result.data[measurement.type] :
                                           new Array()
-      result.data[measurement.type].push({value: measurement.value, time: measurement.type})
+      result.data[measurement.type].push({value: measurement.value, timeCreated: measurement.timeCreated})
     }
 
     return res.status(HTTPStatus.OK).json(result)
