@@ -2,7 +2,8 @@
 // https://stackoverflow.com/questions/36552395/query-multiple-date-ranges-in-mongoose
 
 const validReadingTypes = ['BATTERY', 'TEMPERATURE', 'HUMIDITY', 'PH']
-const express = require('express')
+import express from 'express'
+// const express = require('express')
 const bodyParser = require('body-parser')
 const api = express()
 
