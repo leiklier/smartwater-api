@@ -66,7 +66,7 @@ api.get('/api/node/:nodeId?', (req, res) => {
 
 
 
-api.get('/api/node/:nodeId?/:param?/:fromTimestamp?/:toTimestamp?', (req, res) => {
+api.get('/api/sensorReadings/:nodeId/:param?/:fromTimestamp?/:toTimestamp?', (req, res) => {
   // GET sensor readings
   // No timestamps specified returns the latest reading.
 
@@ -74,7 +74,7 @@ api.get('/api/node/:nodeId?/:param?/:fromTimestamp?/:toTimestamp?', (req, res) =
   sensorReading.find({nodeId: req.params.nodeId,
     $or: [
       { // range 1
-        time: { '$gte': new Date(req.params.fromTimestamp), '$lt': new Date(req.params.toTimestamp) }
+        time: { '$gte': new Date(parseInt(req.params.fromTimestamp)), '$lt': new Date(parseInt(req.params.toTimestamp)) }
       },
     ]
     }, function(err, node){
