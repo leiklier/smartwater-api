@@ -1,4 +1,4 @@
-
+// https://github.com/krissnawat/nodejs-restapi/blob/ep-12/src/modules/posts/post.model.js
 import express from 'express'
 
 import constants from './config/constants'

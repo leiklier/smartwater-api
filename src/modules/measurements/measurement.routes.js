@@ -14,8 +14,8 @@ routes.get(
 
 routes.post(
   '/:nodeId',
-  validate(measurementValidation.createMeasurement),
-  measurementController.createMeasurement
+  validate(measurementValidation.createOneMeasurement),
+  measurementController.createOneMeasurement
 )
 
 export default routes

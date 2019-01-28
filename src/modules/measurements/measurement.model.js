@@ -7,7 +7,7 @@ autoIncrement.initialize(mongoose)
 
 const MeasurementSchema = new Schema(
   { 
-    // The field below is Primary Key and is automatically generated
+    // The field below is Primary Key and is automatically populated
     // _id: Number,
     nodeId: Number,
     type: String,
@@ -30,7 +30,7 @@ const MeasurementSchema = new Schema(
 MeasurementSchema.plugin(autoIncrement.plugin, 'Measurement')
 
 MeasurementSchema.statics = {
-  createMeasurement(args) {
+  createOneMeasurement(args) {
     return this.create(args)
   },
 

@@ -15,7 +15,7 @@ export const VALID_MEASUREMENTS = [
 ]
 
 export default {
-  createMeasurement: {
+  createOneMeasurement: {
     params: {
       nodeId: Joi.number().integer().required()
     },

@@ -2,10 +2,10 @@ import HTTPStatus from 'http-status'
 
 import Measurement from './measurement.model'
 
-export async function createMeasurement(req, res) {
+export async function createOneMeasurement(req, res) {
   try {
     const { params, body } = req
-    const measurement = await Measurement.createMeasurement({...body, ...params})
+    const measurement = await Measurement.createOneMeasurement({...body, ...params})
     return res.status(HTTPStatus.CREATED).json(measurement)
 
   } catch(e) {
