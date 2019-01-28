@@ -23,10 +23,10 @@ export default {
       type: Joi.string().valid( ...VALID_MEASUREMENTS ).required(),
       value: Joi.number().required(),
       timeCreated: Joi.number().integer(),
-      position: {
+      position: Joi.object({
         lat: Joi.number(),
         lng: Joi.number()
-      }
+      })
     }
   },
   createManyMeasurements: {
