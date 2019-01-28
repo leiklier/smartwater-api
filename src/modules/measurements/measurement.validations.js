@@ -3,7 +3,7 @@ import Joi from 'joi'
 const csvJoi = Joi.extend((joi) => ({
   base: joi.array(),
   name: 'stringArray',
-  coerce: (value, state, options) => (value.split ? value.split(',') : value)
+  coerce: (value, state, options) => ((typeof value !== 'undefined' && value.split) ? value.split(',') : value)
 }))
 
 export const VALID_MEASUREMENTS = [
