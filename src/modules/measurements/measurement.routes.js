@@ -14,8 +14,20 @@ routes.get(
 
 routes.post(
   '/:nodeId',
-  validate(measurementValidation.createOneMeasurement),
-  measurementController.createOneMeasurement
+  (req, res, next) => {
+    if(req.body.payload) {
+      validate(measurementValidation.createManyMeasurements)(req, res, next)
+    } else {
+      validate(measurementValidation.createOneMeasurement)(req, res, next)
+    }
+  },
+  (req, res) => {
+    if(req.body.payload) {
+      measurementController.createManyMeasurements(req, res)
+    } else {
+      measurementController.createOneMeasurement(req, res)
+    }
+  }
 )
 
 export default routes

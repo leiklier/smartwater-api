@@ -29,6 +29,22 @@ export default {
       }
     }
   },
+  createManyMeasurements: {
+    params: {
+      nodeId: Joi.number().integer().required()
+    },
+    body: {
+      timeCreated: Joi.number().integer(),
+      position: {
+        lat: Joi.number(),
+        lng: Joi.number()
+      },
+      payload: Joi.array().items(Joi.object({
+        type: Joi.string().valid( ...VALID_MEASUREMENTS ).required(),
+        value: Joi.number().required()
+      })).required()
+    }
+  },
   listMeasurements: {
     params: {
       nodeId: Joi.number().integer().required(),

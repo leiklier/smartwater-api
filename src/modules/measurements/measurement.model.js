@@ -30,8 +30,19 @@ const MeasurementSchema = new Schema(
 MeasurementSchema.plugin(autoIncrement.plugin, 'Measurement')
 
 MeasurementSchema.statics = {
-  createOneMeasurement(args) {
-    return this.create(args)
+  createOneMeasurement(measurement) {
+    return this.create( measurement )
+  },
+  
+  createManyMeasurements(measurements) {
+    var measurementsWritten = new Array()
+
+    for(const measurement of measurements) {
+      this.createOneMeasurement(measurement)
+      measurementsWritten.push(measurement)
+    }
+
+    return measurementsWritten
   },
 
   listMeasurements(args) {

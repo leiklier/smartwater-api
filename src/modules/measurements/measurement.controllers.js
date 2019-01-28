@@ -5,9 +5,30 @@ import Measurement from './measurement.model'
 export async function createOneMeasurement(req, res) {
   try {
     const { params, body } = req
-    const measurement = await Measurement.createOneMeasurement({...body, ...params})
-    return res.status(HTTPStatus.CREATED).json(measurement)
+    const measurementWritten = await Measurement.createOneMeasurement({...body, ...params})
+    return res.status(HTTPStatus.CREATED).json(measurementWritten)
 
+  } catch(e) {
+    return res.status(HTTPStatus.BAD_REQUEST).json(e)
+  }
+}
+
+export async function createManyMeasurements(req, res) {
+  const input = { ...req.params, ...req.body }
+  var measurements = new Array()
+
+  for(var index in input.payload) {
+  measurements.push({
+      nodeId: input.nodeId,
+      type: input.payload[index].type,
+      value: input.payload[index].value,
+      position: input.position
+    })
+  }
+
+  try {
+    const measurementsWritten = await Measurement.createManyMeasurements( measurements )
+    return res.status(HTTPStatus.CREATED).json( measurementsWritten )
   } catch(e) {
     return res.status(HTTPStatus.BAD_REQUEST).json(e)
   }
