@@ -4,8 +4,13 @@ import Measurement from './measurement.model'
 
 export async function createOneMeasurement(req, res) {
   try {
-    const { params, body } = req
-    const measurementWritten = await Measurement.createOneMeasurement({...body, ...params})
+    var newMeasurement = {...req.body, ...req.params}
+
+    if(newMeasurement.timeCreated) {
+      newMeasurement.timeCreated = new Date(newMeasurement.timeCreated)
+    }
+
+    const measurementWritten = await Measurement.createOneMeasurement(newMeasurement)
     return res.status(HTTPStatus.CREATED).json(measurementWritten)
 
   } catch(e) {
