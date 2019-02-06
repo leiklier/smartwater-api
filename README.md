@@ -73,7 +73,7 @@ For å hente ut verdier sendes en GET-request til databasen.
 ```
 188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/
 ```
-Responsen blir alle målingene som har blitt lagret i databasen. I fremtiden vil dette kun returnere den siste målingen, men for øyeblikket returnerer den alle.
+Responsen blir den siste målingen for hver av sensorene for den spesifiserte sensornoden.
 
 ```
 {
@@ -83,21 +83,13 @@ Responsen blir alle målingene som har blitt lagret i databasen. I fremtiden vil
             {
                 "value": 10,
                 "timeCreated": "2019-02-06T09:41:55.432Z"
-            },
-            {
-                "value": 10,
-                "timeCreated": "2019-02-06T09:42:30.780Z"
-            },
+            }
         ],
         "BATTERY": [
             {
                 "value": 30,
                 "timeCreated": "2019-02-06T09:41:55.431Z"
-            },
-            {
-                "value": 30,
-                "timeCreated": "2019-02-06T09:41:55.431Z"
-            },
+            }
         ]
     }
 }
