@@ -12,9 +12,9 @@ applyMiddleware(app)
 apiRoutes(app)
 
 app.listen(constants.express.port, err => {
-  if(err) {
-    throw err
-  } else {
-    console.log('Server running')
-  }
+	if (err) {
+		throw err
+	} else {
+		console.log('Server running')
+	}
 })

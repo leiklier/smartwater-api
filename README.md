@@ -1,6 +1,7 @@
 # Vannovervakning-api
 Ett enkelt API(aplication programming interface) for å sende målinger fra [thethingsnetwork](https://www.thethingsnetwork.org/) med en POST-request til en database, og hente målingene igjen senere med en GET-request.
 
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ---
 ### Opplasting fra ttn
 For å laste opp målinger fra ttn er det mulig å enten sende målinger fra en sensor eller fra flere av de støttede typene (PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, BATTERY). 
