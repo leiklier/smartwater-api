@@ -53,10 +53,10 @@ MeasurementSchema.statics = {
     if(args.fromTimestamp) {
     // Query should be time restricted
       query.$or = [{
-        time: {'$gte': new Date(parseInt(args.fromTimestamp))}
+        timeCreated: {'$gte': new Date(parseInt(args.fromTimestamp))}
       }]
       if(args.toTimestamp) {
-        query.$or[0].time.$lt = new Date(parseInt(args.toTimestamp))
+        query.$or[0].timeCreated.$lt = new Date(parseInt(args.toTimestamp))
       }
     }
     
