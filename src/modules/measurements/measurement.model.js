@@ -46,28 +46,55 @@ MeasurementSchema.statics = {
 	},
 
 	listMeasurements(args) {
-		var query = {
-			nodeId: args.nodeId
-		}
-
 		if (args.fromTimestamp) {
 			// Query should be time restricted
+			var query = {
+				nodeId: args.nodeId
+			}
+
 			query.$or = [
 				{
 					timeCreated: { $gte: new Date(parseInt(args.fromTimestamp)) }
 				}
 			]
 			if (args.toTimestamp) {
+				// Query should have upper bound on time restriction
 				query.$or[0].timeCreated.$lt = new Date(parseInt(args.toTimestamp))
 			}
+			if (args.types) {
+				// Query should be restricted to only certain measurement types
+				query.type = args.types
+			}
+			// Run query
+			return this.find(query, (err, response) => {})
+		} else {
+			// No timestamps received => return last measurements
+			var aggregate = [
+				{
+					$match: {
+						nodeId: args.nodeId
+					}
+				},
+				{
+					$sort: {
+						// Sort ascending first by type, then timeCreated
+						type: 1,
+						timeCreated: 1
+					}
+				},
+				{
+					$group: {
+						// Group all measurements by _id: type and show these fields:
+						_id: '$type',
+						type: { $last: '$type' },
+						value: { $last: '$value' },
+						position: { $last: '$position' },
+						timeCreated: { $last: '$timeCreated' }
+					}
+				}
+			]
+			return this.aggregate(aggregate, (err, response) => {})
 		}
-
-		if (args.types) {
-			// Query should be restricted to only certain measurement types
-			query.type = args.types
-		}
-
-		return this.find(query, (err, response) => {})
 	}
 }
 
