@@ -93,6 +93,13 @@ MeasurementSchema.statics = {
 					}
 				}
 			]
+			if (args.types) {
+				// Type is specified in query, so restrict result to those matching
+				aggregate[0].$match.type = {
+					$in: args.types
+				}
+			}
+
 			return this.aggregate(aggregate, (err, response) => {})
 		}
 	}
