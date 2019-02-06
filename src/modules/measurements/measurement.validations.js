@@ -41,7 +41,8 @@ export default {
       },
       payload: Joi.array().items(Joi.object({
         type: Joi.string().valid( ...VALID_MEASUREMENTS ).required(),
-        value: Joi.number().required()
+        value: Joi.number().required(),
+        timeCreated: Joi.number().integer()
       })).required()
     }
   },

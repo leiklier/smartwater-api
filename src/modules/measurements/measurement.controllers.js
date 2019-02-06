@@ -18,12 +18,20 @@ export async function createManyMeasurements(req, res) {
   var measurements = new Array()
 
   for(var index in input.payload) {
-  measurements.push({
+    var thisMeasurement = {
       nodeId: input.nodeId,
       type: input.payload[index].type,
       value: input.payload[index].value,
       position: input.position
-    })
+    }
+
+    if(input.payload[index].timeCreated) {
+      thisMeasurement.timeCreated = new Date(input.payload[index].timeCreated)
+    } else if(input.timeCreated) {
+      thisMeasurement.timeCreated = new Date(input.timeCreated)
+    }
+
+    measurements.push(thisMeasurement)
   }
 
   try {
