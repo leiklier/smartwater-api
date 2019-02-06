@@ -1,5 +1,5 @@
 # Vannovervakning-api
-Ett enkelt api(aplication programming interface) for å sende målinger fra [thethingsnetwork](https://www.thethingsnetwork.org/) med en POST-request til en database, og hente målingene igjen senere med en GET-request.
+Ett enkelt API(aplication programming interface) for å sende målinger fra [thethingsnetwork](https://www.thethingsnetwork.org/) med en POST-request til en database, og hente målingene igjen senere med en GET-request.
 
 ---
 ### Opplasting fra ttn
@@ -68,3 +68,67 @@ function Decoder(bytes, port) {
 ```
 
 
+For å hente ut verdier sendes en GET-request til databasen.
+```
+188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/
+```
+Responsen blir alle målingene som har blitt lagret i databasen. I fremtiden vil dette kun returnere den siste målingen, men for øyeblikket returnerer den alle.
+
+```
+{
+    "nodeId": 1,
+    "data": {
+        "HUMIDITY": [
+            {
+                "value": 10,
+                "timeCreated": "2019-02-06T09:41:55.432Z"
+            },
+            {
+                "value": 10,
+                "timeCreated": "2019-02-06T09:42:30.780Z"
+            },
+        ],
+        "BATTERY": [
+            {
+                "value": 30,
+                "timeCreated": "2019-02-06T09:41:55.431Z"
+            },
+            {
+                "value": 30,
+                "timeCreated": "2019-02-06T09:41:55.431Z"
+            },
+        ]
+    }
+}
+
+```
+
+<br/>
+
+For å hente ut målinger mellom et tidsintervall brukes URLen på følgende format.
+```
+188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/FROM_TIMESTAMP/TO_TIMESTAMP
+```
+eller for å hente målinger fra ett spesifikt tidspunkt frem til siste måling kan `TO_TIMESTAMP` fjernes
+
+```
+188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/FROM_TIMESTAMP/
+```
+
+<br/>
+<br/>
+
+For å filtrere ut målinger av en sensor brukes 
+```
+188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/?types=INSERT_TYPE,INSERT_TYPE
+```
+eller
+```
+188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/FROM_TIMESTAMP/TO_TIMESTAMP/?types=INSERT_TYPE,INSERT_TYPE
+```
+
+Der det kan settes inn så mange sensortyper som ønskelig for `INSERT_TYPE`<br/>
+
+
+<br/>
+URLen som benyttes i dette APIet kan hende endres i fremtiden til noe litt penere.
