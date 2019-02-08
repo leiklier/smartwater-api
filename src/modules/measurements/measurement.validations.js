@@ -10,7 +10,8 @@ const csvJoi = Joi.extend(joi => ({
 export const VALID_MEASUREMENTS = [
 	'BATTERY',
 	'TEMPERATURE',
-	'HUMIDITY',
+	'TURBIDITY',
+	'DISSOLVED_OXYGEN',
 	'PH',
 	'CONDUCTIVITY'
 ]
