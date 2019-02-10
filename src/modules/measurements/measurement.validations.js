@@ -16,6 +16,8 @@ export const VALID_MEASUREMENTS = [
 	'CONDUCTIVITY'
 ]
 
+export const VALID_AGGREGATES = ['HIGHEST', 'LOWEST', 'AVERAGE']
+
 export default {
 	createOneMeasurement: {
 		params: {
@@ -72,7 +74,8 @@ export default {
 			types: csvJoi
 				.stringArray()
 				.items(Joi.string().valid(...VALID_MEASUREMENTS))
-				.single()
+				.single(),
+			aggregate: Joi.string().valid(...VALID_AGGREGATES)
 		}
 	}
 }

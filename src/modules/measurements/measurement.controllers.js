@@ -52,11 +52,11 @@ export async function createManyMeasurements(req, res) {
 
 export async function getMeasurements(req, res) {
 	try {
-		const { nodeId, types, fromTimestamp, toTimestamp } = {
+		const { nodeId, types, fromTimestamp, toTimestamp, aggregate } = {
 			...req.params,
 			...req.query
 		}
-		// const { params, query } = req
+
 		var measurements
 		if (typeof fromTimestamp === 'undefined') {
 			// No time restrictions, so return only latest
@@ -64,12 +64,22 @@ export async function getMeasurements(req, res) {
 				nodeId,
 				types
 			})
-		} else {
+		} else if (typeof aggregate === 'undefined') {
+			// Return all measurements within time restrictions
 			measurements = await Measurement.listMeasurements({
 				nodeId,
 				types,
 				fromTimestamp,
 				toTimestamp
+			})
+		} else {
+			// Aggregate measurements within time restrictions
+			measurements = await Measurement.getAggregatedMeasurements({
+				nodeId,
+				types,
+				fromTimestamp,
+				toTimestamp,
+				aggregate
 			})
 		}
 

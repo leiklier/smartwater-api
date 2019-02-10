@@ -80,10 +80,82 @@ MeasurementSchema.statics = {
 		return this.aggregate(aggregate, (err, response) => {})
 	},
 
+	getAggregatedMeasurements(args) {
+		var query = [
+			{
+				$match: {
+					nodeId: args.nodeId,
+					$and: [
+						{
+							// Lower bound on time restriction
+							timeCreated: { $gte: new Date(parseInt(args.fromTimestamp)) }
+						}
+					]
+				}
+			},
+			{
+				$sort: {
+					// Sort ascending first by type, then value
+					type: 1,
+					value: 1
+				}
+			}
+		]
+
+		if (args.toTimestamp) {
+			// Query should have upper bound on time restriction
+			query[0].$match.$and[0].timeCreated.$lt = new Date(
+				parseInt(args.toTimestamp)
+			)
+		}
+
+		if (args.types) {
+			// Type is specified in query, so restrict result to those matching
+			query[0].$match.type = {
+				$in: args.types
+			}
+		}
+
+		var aggregate, $group
+		switch (args.aggregate) {
+		case 'LOWEST':
+			aggregate = '$first'
+			$group = {
+				_id: '$type',
+				type: { [aggregate]: '$type' },
+				value: { [aggregate]: '$value' },
+				position: { [aggregate]: '$position' },
+				timeCreated: { [aggregate]: '$timeCreated' }
+			}
+			break
+		case 'HIGHEST':
+			aggregate = '$last'
+			$group = {
+				_id: '$type',
+				type: { [aggregate]: '$type' },
+				value: { [aggregate]: '$value' },
+				position: { [aggregate]: '$position' },
+				timeCreated: { [aggregate]: '$timeCreated' }
+			}
+			break
+		case 'AVERAGE':
+			aggregate = '$avg'
+			$group = {
+				_id: '$type',
+				type: { $last: '$type' },
+				value: { [aggregate]: '$value' }
+			}
+			break
+		}
+
+		query.push({ $group: $group })
+		return this.aggregate(query, (err, response) => {})
+	},
+
 	listMeasurements(args) {
 		var query = {
 			nodeId: args.nodeId,
-			$or: [
+			$and: [
 				{
 					// Lower bound on time restriction
 					timeCreated: { $gte: new Date(parseInt(args.fromTimestamp)) }
@@ -93,7 +165,7 @@ MeasurementSchema.statics = {
 
 		if (args.toTimestamp) {
 			// Query should have upper bound on time restriction
-			query.$or[0].timeCreated.$lt = new Date(parseInt(args.toTimestamp))
+			query.$and[0].timeCreated.$lt = new Date(parseInt(args.toTimestamp))
 		}
 		if (args.types) {
 			// Query should be restricted to only certain measurement types
