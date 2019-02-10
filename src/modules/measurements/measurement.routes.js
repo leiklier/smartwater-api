@@ -1,10 +1,22 @@
-import { Router } from 'express'
+import express from 'express'
 import validate from 'express-validation'
+
+import expressWs from 'express-ws'
+expressWs(express()) // Modify global express.Router prototype
 
 import * as measurementController from './measurement.controllers'
 import measurementValidation from './measurement.validations'
 
-const routes = new Router()
+const routes = express.Router()
+
+routes.ws('/:nodeId', function(ws, req) {
+	ws.on('open', function open() {
+		console.log('connected')
+	})
+	ws.on('message', function incoming(data) {
+		ws.send(req.params.nodeId)
+	})
+})
 
 routes.get(
 	'/:nodeId/:fromTimestamp?/:toTimestamp?',
