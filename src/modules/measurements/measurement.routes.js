@@ -8,8 +8,8 @@ const routes = new Router()
 
 routes.get(
 	'/:nodeId/:fromTimestamp?/:toTimestamp?',
-	validate(measurementValidation.listMeasurements),
-	measurementController.listMeasurements
+	validate(measurementValidation.getMeasurements),
+	measurementController.getMeasurements
 )
 
 routes.post(

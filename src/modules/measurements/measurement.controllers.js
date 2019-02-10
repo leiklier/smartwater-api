@@ -50,15 +50,31 @@ export async function createManyMeasurements(req, res) {
 	}
 }
 
-export async function listMeasurements(req, res) {
+export async function getMeasurements(req, res) {
 	try {
-		const { params, query } = req
-		const measurements = await Measurement.listMeasurements({
-			...params,
-			...query
-		})
+		const { nodeId, types, fromTimestamp, toTimestamp } = {
+			...req.params,
+			...req.query
+		}
+		// const { params, query } = req
+		var measurements
+		if (typeof fromTimestamp === 'undefined') {
+			// No time restrictions, so return only latest
+			measurements = await Measurement.getLatestMeasurements({
+				nodeId,
+				types
+			})
+		} else {
+			measurements = await Measurement.listMeasurements({
+				nodeId,
+				types,
+				fromTimestamp,
+				toTimestamp
+			})
+		}
 
-		var result = { nodeId: params.nodeId, data: {} }
+		var result = { nodeId: nodeId, data: {} }
+
 		for (var measurement of measurements) {
 			result.data[measurement.type] = Array.isArray(
 				result.data[measurement.type]

@@ -60,7 +60,7 @@ export default {
 				.required()
 		}
 	},
-	listMeasurements: {
+	getMeasurements: {
 		params: {
 			nodeId: Joi.number()
 				.integer()
