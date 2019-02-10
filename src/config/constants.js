@@ -1,6 +1,6 @@
 export default {
 	express: {
-		port: process.env.PORT || 5000
+		devPort: process.env.PORT || 5000
 	},
 	mongodb: {
 		host: 'localhost',
