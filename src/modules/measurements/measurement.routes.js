@@ -17,16 +17,26 @@ const routes = express.Router()
 routes.ws('/:nodeId', function(ws, req) {
 	const types = req.query.types.split(',')
 
+	function handleCreateEventEmitter(measurement) {
+		ws.send(JSON.stringify(measurement))
+	}
 	ws.on('message', msg => ws.send(msg))
 
 	// Bind correct createEmitter-events to websocket
 	for (const type of types) {
-		createEventEmitter.on(`${req.params.nodeId}_${type}`, measurement => {
-			ws.send(JSON.stringify(measurement))
-		})
+		createEventEmitter.on(
+			`${req.params.nodeId}_${type}`,
+			handleCreateEventEmitter
+		)
 	}
 	ws.on('close', () => {
 		// We should detach from createEmitter
+		for (const type of types) {
+			createEventEmitter.removeListener(
+				`${req.params.nodeId}_${type}`,
+				handleCreateEventEmitter
+			)
+		}
 	})
 })
 
