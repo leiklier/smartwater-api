@@ -1,9 +1,13 @@
 import mongoose, { Schema } from 'mongoose'
 const autoIncrement = require('mongoose-auto-increment')
 
+import events from 'events'
+
 import config from '../../config/constants.js'
 
 autoIncrement.initialize(mongoose)
+
+export var createEventEmitter = new events.EventEmitter()
 
 const MeasurementSchema = new Schema(
 	{
@@ -31,6 +35,11 @@ MeasurementSchema.plugin(autoIncrement.plugin, 'Measurement')
 
 MeasurementSchema.statics = {
 	createOneMeasurement(measurement) {
+		createEventEmitter.emit(`${measurement.nodeId}_${measurement.type}`, {
+			...measurement,
+			timeCreated: new Date()
+		})
+
 		return this.create(measurement)
 	},
 

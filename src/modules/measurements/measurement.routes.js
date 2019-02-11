@@ -4,17 +4,29 @@ import validate from 'express-validation'
 import expressWs from 'express-ws'
 expressWs(express()) // Modify global express.Router prototype
 
+import { createEventEmitter } from './measurement.model'
 import * as measurementController from './measurement.controllers'
 import measurementValidation from './measurement.validations'
+
+createEventEmitter.on('error', e => {
+	console.log(e)
+})
 
 const routes = express.Router()
 
 routes.ws('/:nodeId', function(ws, req) {
-	ws.on('open', function open() {
-		console.log('connected')
-	})
-	ws.on('message', function incoming(data) {
-		ws.send(req.params.nodeId)
+	const types = req.query.types.split(',')
+
+	ws.on('message', msg => ws.send(msg))
+
+	// Bind correct createEmitter-events to websocket
+	for (const type of types) {
+		createEventEmitter.on(`${req.params.nodeId}_${type}`, measurement => {
+			ws.send(JSON.stringify(measurement))
+		})
+	}
+	ws.on('close', () => {
+		// We should detach from createEmitter
 	})
 })
 
