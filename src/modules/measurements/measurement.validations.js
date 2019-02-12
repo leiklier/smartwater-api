@@ -51,17 +51,19 @@ export default {
 				latitude: Joi.number(),
 				longitude: Joi.number()
 			}),
-			payload_fields: Joi.array()
-				.items(
-					Joi.object({
-						type: Joi.string()
-							.valid(...VALID_MEASUREMENTS)
-							.required(),
-						value: Joi.number().required(),
-						timeCreated: Joi.number().integer()
-					})
-				)
-				.required()
+			payload_fields: Joi.object({
+				data: Joi.array()
+					.items(
+						Joi.object({
+							type: Joi.string()
+								.valid(...VALID_MEASUREMENTS)
+								.required(),
+							value: Joi.number().required(),
+							timeCreated: Joi.number().integer()
+						})
+					)
+					.required()
+			}).required()
 		}
 	},
 	getMeasurements: {
@@ -81,4 +83,3 @@ export default {
 		}
 	}
 }
-

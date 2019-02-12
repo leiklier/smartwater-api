@@ -23,11 +23,11 @@ export async function createManyMeasurements(req, res) {
 	const input = { ...req.params, ...req.body }
 	var measurements = new Array()
 
-	for (var index in input.payload_fields) {
+	for (var index in input.payload_fields.data) {
 		var thisMeasurement = {
 			nodeId: input.nodeId,
-			type: input.payload_fields[index].type,
-			value: input.payload_fields[index].value,
+			type: input.payload_fields.data[index].type,
+			value: input.payload_fields.data[index].value,
 			// position: input.position
 			position: {
 				lat: input.metadata.latitude,
@@ -35,9 +35,9 @@ export async function createManyMeasurements(req, res) {
 			}
 		}
 
-		if (input.payload_fields[index].timeCreated) {
+		if (input.payload_fields.data[index].timeCreated) {
 			thisMeasurement.timeCreated = new Date(
-				input.payload_fields[index].timeCreated
+				input.payload_fields.data[index].timeCreated
 			)
 		} else if (input.metadata.time) {
 			thisMeasurement.timeCreated = new Date(input.metadata.time)
