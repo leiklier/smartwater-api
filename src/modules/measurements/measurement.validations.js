@@ -46,6 +46,31 @@ export default {
 				.required()
 		},
 		body: {
+			timeCreated: Joi.number().integer(),
+			position: {
+				lat: Joi.number(),
+				lng: Joi.number()
+			},
+			payload: Joi.array()
+				.items(
+					Joi.object({
+						type: Joi.string()
+							.valid(...VALID_MEASUREMENTS)
+							.required(),
+						value: Joi.number().required(),
+						timeCreated: Joi.number().integer()
+					})
+				)
+				.required()
+		}
+	},
+	createManyMeasurementsTTN: {
+		params: {
+			nodeId: Joi.number()
+				.integer()
+				.required()
+		},
+		body: {
 			metadata: Joi.object({
 				time: Joi.string().regex(ISO_8601_REGEX),
 				latitude: Joi.number(),

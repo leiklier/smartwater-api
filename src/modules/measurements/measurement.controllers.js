@@ -23,6 +23,37 @@ export async function createManyMeasurements(req, res) {
 	const input = { ...req.params, ...req.body }
 	var measurements = new Array()
 
+	for (var index in input.payload) {
+		var thisMeasurement = {
+			nodeId: input.nodeId,
+			type: input.payload[index].type,
+			value: input.payload[index].value,
+			position: input.position
+		}
+
+		if (input.payload[index].timeCreated) {
+			thisMeasurement.timeCreated = new Date(input.payload[index].timeCreated)
+		} else if (input.timeCreated) {
+			thisMeasurement.timeCreated = new Date(input.timeCreated)
+		}
+
+		measurements.push(thisMeasurement)
+	}
+
+	try {
+		const measurementsWritten = await Measurement.createManyMeasurements(
+			measurements
+		)
+		return res.status(HTTPStatus.CREATED).json(measurementsWritten)
+	} catch (e) {
+		return res.status(HTTPStatus.BAD_REQUEST).json(e)
+	}
+}
+
+export async function createManyMeasurementsTTN(req, res) {
+	const input = { ...req.params, ...req.body }
+	var measurements = new Array()
+
 	for (var index in input.payload_fields.data) {
 		var thisMeasurement = {
 			nodeId: input.nodeId,

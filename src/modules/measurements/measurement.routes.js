@@ -49,8 +49,10 @@ routes.get(
 routes.post(
 	'/:nodeId',
 	(req, res, next) => {
-		if (req.body.payload_fields) {
+		if (req.body.payload) {
 			validate(measurementValidation.createManyMeasurements)(req, res, next)
+		} else if (req.body.payload_fields) {
+			validate(measurementValidation.createManyMeasurementsTTN)(req, res, next)
 		} else {
 			validate(measurementValidation.createOneMeasurement)(req, res, next)
 		}
@@ -58,6 +60,8 @@ routes.post(
 	(req, res) => {
 		if (req.body.payload) {
 			measurementController.createManyMeasurements(req, res)
+		} else if (req.body.payload_fields) {
+			measurementController.createManyMeasurementsTTN(req, res)
 		} else {
 			measurementController.createOneMeasurement(req, res)
 		}
