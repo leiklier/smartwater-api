@@ -7,6 +7,8 @@ const csvJoi = Joi.extend(joi => ({
 		typeof value !== 'undefined' && value.split ? value.split(',') : value
 }))
 
+const ISO_8601_REGEX = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d)/
+
 export const VALID_MEASUREMENTS = [
 	'BATTERY',
 	'TEMPERATURE',
@@ -44,12 +46,12 @@ export default {
 				.required()
 		},
 		body: {
-			timeCreated: Joi.number().integer(),
-			position: {
-				lat: Joi.number(),
-				lng: Joi.number()
-			},
-			payload: Joi.array()
+			metadata: Joi.object({
+				time: Joi.string().regex(ISO_8601_REGEX),
+				latitude: Joi.number(),
+				longitude: Joi.number()
+			}),
+			payload_fields: Joi.array()
 				.items(
 					Joi.object({
 						type: Joi.string()
@@ -79,3 +81,4 @@ export default {
 		}
 	}
 }
+

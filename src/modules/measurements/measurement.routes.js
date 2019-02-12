@@ -49,7 +49,7 @@ routes.get(
 routes.post(
 	'/:nodeId',
 	(req, res, next) => {
-		if (req.body.payload) {
+		if (req.body.payload_fields) {
 			validate(measurementValidation.createManyMeasurements)(req, res, next)
 		} else {
 			validate(measurementValidation.createOneMeasurement)(req, res, next)
