@@ -171,6 +171,11 @@ MeasurementSchema.statics = {
 				}
 			]
 		}
+		const options = {
+			sort: {
+				timeCreated: -1 // Descending
+			}
+		}
 
 		if (args.toTimestamp) {
 			// Query should have upper bound on time restriction
@@ -181,7 +186,7 @@ MeasurementSchema.statics = {
 			query.type = args.types
 		}
 		// Run query
-		return this.find(query, (err, response) => {})
+		return this.find(query, null, options, (err, response) => {})
 	}
 }
 
