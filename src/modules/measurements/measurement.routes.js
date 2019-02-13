@@ -6,7 +6,9 @@ expressWs(express()) // Modify global express.Router prototype
 
 import { createEventEmitter } from './measurement.model'
 import * as measurementController from './measurement.controllers'
-import measurementValidation from './measurement.validations'
+import measurementValidation, {
+	VALID_MEASUREMENTS
+} from './measurement.validations'
 
 createEventEmitter.on('error', e => {
 	console.log(e)
@@ -15,7 +17,9 @@ createEventEmitter.on('error', e => {
 const routes = express.Router()
 
 routes.ws('/:nodeId', function(ws, req) {
-	const types = req.query.types.split(',')
+	const types = req.query.types
+		? req.query.types.split(',')
+		: VALID_MEASUREMENTS
 
 	function handleCreateEventEmitter(measurement) {
 		ws.send(JSON.stringify(measurement))
