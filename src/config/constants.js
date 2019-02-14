@@ -6,6 +6,7 @@ export default {
 		host: 'localhost',
 		port: 27017,
 		database: 'vannovervakning',
-		measurementsCollection: 'measurements'
+		measurementsCollection: 'measurements',
+		nodesCollection: 'nodes'
 	}
 }
