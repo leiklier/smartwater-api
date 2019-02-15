@@ -8,7 +8,7 @@ For å laste opp målinger fra ttn er det mulig å enten sende målinger fra en 
 
 For å sende data fra ttn til databasen gjøres en POST-request til 
 ```
-188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR
+https://vannovervakning.com/api/v1/measurements/INSERT_GRUPPENR
 ```
 Der `INSERT_GRUPPENR` byttes ut med nummeret til din gruppe.
 
@@ -54,7 +54,7 @@ function Decoder(bytes, port) {
     
     //Returerer verdiene.
     return {
-      payload: [
+      data: [
           {
               type: TEMPERATURE,
               value: temp,
@@ -71,7 +71,7 @@ function Decoder(bytes, port) {
 
 For å hente ut verdier sendes en GET-request til databasen.
 ```
-188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/
+https://vannovervakning.com/api/v1/measurements/INSERT_GRUPPENR/
 ```
 Responsen blir den siste målingen for hver av sensorene for den spesifiserte sensornoden.
 
@@ -100,12 +100,12 @@ Responsen blir den siste målingen for hver av sensorene for den spesifiserte se
 
 For å hente ut målinger mellom et tidsintervall brukes URLen på følgende format.
 ```
-188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/FROM_TIMESTAMP/TO_TIMESTAMP
+https://vannovervakning.com/api/v1/measurements/INSERT_GRUPPENR/FROM_TIMESTAMP/TO_TIMESTAMP
 ```
 eller for å hente målinger fra ett spesifikt tidspunkt frem til siste måling kan `TO_TIMESTAMP` fjernes
 
 ```
-188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/FROM_TIMESTAMP/
+https://vannovervakning.com/api/v1/measurements/INSERT_GRUPPENR/FROM_TIMESTAMP/
 ```
 
 <br/>
@@ -113,15 +113,14 @@ eller for å hente målinger fra ett spesifikt tidspunkt frem til siste måling 
 
 For å filtrere ut målinger av en sensor brukes 
 ```
-188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/?types=INSERT_TYPE,INSERT_TYPE
+https://vannovervakning.com/api/v1/measurements/INSERT_GRUPPENR/?types=INSERT_TYPE,INSERT_TYPE
 ```
 eller
 ```
-188.166.37.247:5000/api/v1/measurements/INSERT_GRUPPENR/FROM_TIMESTAMP/TO_TIMESTAMP/?types=INSERT_TYPE,INSERT_TYPE
+https://vannovervakning.com/api/v1/measurements/INSERT_GRUPPENR/FROM_TIMESTAMP/TO_TIMESTAMP/?types=INSERT_TYPE,INSERT_TYPE
 ```
 
 Der det kan settes inn så mange sensortyper som ønskelig for `INSERT_TYPE`<br/>
 
 
 <br/>
-URLen som benyttes i dette APIet kan hende endres i fremtiden til noe litt penere.
