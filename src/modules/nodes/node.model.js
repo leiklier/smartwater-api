@@ -14,14 +14,7 @@ const NodeSchema = new Schema(
 		devEUI: Number,
 		devAddress: Number,
 		settings: {
-			measurements: [
-				{
-					type: String,
-					updateInterval: Number,
-					tooHigh: Number,
-					tooLow: Number
-				}
-			]
+      measurements: Object // Keys: type, Values: object with settings
 		}
 	},
 	{
