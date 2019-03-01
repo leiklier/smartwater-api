@@ -4,7 +4,7 @@ Ett enkelt API(aplication programming interface) for å sende målinger fra [the
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ---
 ### Opplasting fra ttn
-For å laste opp målinger fra ttn er det mulig å enten sende målinger fra en sensor eller fra flere av de støttede typene (PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, BATTERY). 
+For å laste opp målinger fra ttn er det mulig å enten sende målinger fra en sensor eller fra flere av de støttede typene (PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, BATTERY, DISSOLVED_OXYGEN). 
 
 For å sende data fra ttn til databasen gjøres en POST-request til 
 ```
@@ -12,36 +12,26 @@ https://vannovervakning.com/api/v1/measurements/INSERT_GRUPPENR
 ```
 Der `INSERT_GRUPPENR` byttes ut med nummeret til din gruppe.
 
-Dataen som sendes må være på formatetsom vist under. 
+Dataen som sendes fra TTN må være på formatet som vist under. 
 ``` javascript
 {
-
-timeCreated: INSERT_TIME,
-
-position: {
-    lat: INSERT_LATTITUDE,
-    lng: INSERT_LONGTITUDE
-}
-
-payload: [
-    {
-        type: INSERT_TYPE, 
-        value: INSERT_TYPE,
-        timeCreated: INSERT_TIME
-    },
-    {
-        type: INSERT_TYPE, 
-        value: INSERT_TYPE,
-        timeCreated: INSERT_TIME
-    },
-
+"data":
+	[
+		{
+			"type": "TEMPERATURE",
+			"value": 21.3
+		},
+		{
+			"type": "CONDUCTIVITY",
+			"value": 120
+		}
     .
     .
     .
   ]
 }
 ```
-Både `timeCreated` og `position` er valgfritt. Inne i `payload` kan det legges til så mange målinger som ønskelig. Støttede målinger (`type`) er som tidligere nevnt `PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, BATTERY`. Er det behov for en annen type måling, er det bare å ta kontakt med Leik.
+Støttede målinger (`type`) er som tidligere nevnt `PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, BATTERY, DISSOLVED_OXYGEN`. Er det behov for en annen type måling, er det bare å ta kontakt med Leik.
 
 En veldig enkel eksempel payloadfunksjon kan se slik ut:
 
