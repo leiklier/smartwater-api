@@ -15,20 +15,19 @@ Der `INSERT_GRUPPENR` byttes ut med nummeret til din gruppe.
 Dataen som sendes fra TTN må være på formatet som vist under. 
 ``` javascript
 {
-"data":
-	[
+	data: [
 		{
-			"type": "TEMPERATURE",
-			"value": 21.3
+			type: "TEMPERATURE",
+			value: 21.3
 		},
 		{
-			"type": "CONDUCTIVITY",
-			"value": 120
+			type: "CONDUCTIVITY",
+			value: 120
 		}
-    .
-    .
-    .
-  ]
+		.
+		.
+		.
+	]
 }
 ```
 Støttede målinger (`type`) er som tidligere nevnt `PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, BATTERY, DISSOLVED_OXYGEN`. Er det behov for en annen type måling, er det bare å ta kontakt med Leik.
@@ -46,11 +45,11 @@ function Decoder(bytes, port) {
     return {
       data: [
           {
-              type: TEMPERATURE,
-              value: temp,
+              type: "TEMPERATURE",
+              value: "temp",
           },
           {
-              type: TURBIDITY,
+              type: "TURBIDITY",
               value: turb
           }
       ]
