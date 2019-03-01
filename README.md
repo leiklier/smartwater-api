@@ -4,7 +4,7 @@ Ett enkelt API(aplication programming interface) for å sende målinger fra [the
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ---
 ### Opplasting fra ttn
-For å laste opp målinger fra ttn er det mulig å enten sende målinger fra en sensor eller fra flere av de støttede typene (PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, BATTERY, DISSOLVED_OXYGEN). 
+For å laste opp målinger fra ttn er det mulig å enten sende målinger fra en sensor eller fra flere av de støttede typene (PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, TEMPERATURE_INSIDE, HUMIDITY, BATTERY, DISSOLVED_OXYGEN). 
 
 For å sende data fra ttn til databasen gjøres en POST-request til 
 ```
@@ -30,7 +30,7 @@ Dataen som sendes fra TTN må være på formatet som vist under.
 	]
 }
 ```
-Støttede målinger (`type`) er som tidligere nevnt `PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, BATTERY, DISSOLVED_OXYGEN`. Er det behov for en annen type måling, er det bare å ta kontakt med Leik.
+Støttede målinger (`type`) er som tidligere nevnt `PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, TEMPERATURE_INSIDE, HUMIDITY, BATTERY, DISSOLVED_OXYGEN`. Er det behov for en annen type måling, er det bare å ta kontakt med Leik.
 
 En veldig enkel eksempel payloadfunksjon kan se slik ut:
 
