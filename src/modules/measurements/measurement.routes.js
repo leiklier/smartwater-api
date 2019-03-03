@@ -16,7 +16,7 @@ createEventEmitter.on('error', e => {
 
 const routes = express.Router()
 
-routes.ws('/:nodeId', handleWebsocket)
+routes.ws('/', handleWebsocket)
 
 routes.get(
 	'/:nodeId/:fromTimestamp?/:toTimestamp?',

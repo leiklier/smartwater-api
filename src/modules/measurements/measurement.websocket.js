@@ -2,62 +2,105 @@ import { createEventEmitter } from './measurement.model'
 import { VALID_MEASUREMENTS } from './measurement.validations'
 
 export function handleWebsocket(ws, req) {
-	const typesInput = req.query.types
-		? req.query.types.split(',')
-		: VALID_MEASUREMENTS
-	var types = new Array() // Holds types listened to at any moment
+	var types = new Object() // Holds types listened to at any moment, sparse array with key=nodeId
 
 	function handleCreateEventEmitter(measurement) {
-		ws.send(JSON.stringify(measurement))
-	}
-	function addCreateEventEmitter(type) {
-		if (VALID_MEASUREMENTS.includes(type) && !types.includes(type)) {
-			types.push(type)
-
-			createEventEmitter.on(
-				`${req.params.nodeId}_${type}`,
-				handleCreateEventEmitter
-			)
-		}
-	}
-	function removeCreateEventEmitter(type) {
-		if (types.includes(type)) {
-			types = types.filter(element => element !== type)
-
-			createEventEmitter.removeListener(
-				`${req.params.nodeId}_${type}`,
-				handleCreateEventEmitter
-			)
-		}
-	}
-
-	ws.on('message', msg => {
-		if (/types/.test(msg)) {
-			if (/^types\+=/.test(msg)) {
-				for (const type of msg.substring(7).split(',')) {
-					addCreateEventEmitter(type)
+		ws.send(
+			JSON.stringify({
+				type: 'WEBSOCKET_MEASUREMENTS_RX',
+				payload: {
+					action: 'INCOMING_DATA',
+					data: measurement
 				}
-			} else if (/^types-=/.test(msg)) {
-				for (const type of msg.substring(7).split(',')) {
-					removeCreateEventEmitter(type)
+			})
+		)
+	}
+
+	function addCreateEventEmitters(typesInput) {
+		for (const nodeId in typesInput) {
+			if (!types[nodeId]) types[nodeId] = new Array()
+
+			for (const type of typesInput[nodeId]) {
+				if (
+					VALID_MEASUREMENTS.includes(type) &&
+					!types[nodeId].includes(type)
+				) {
+					types[nodeId].push(type)
+
+					createEventEmitter.on(`${nodeId}_${type}`, handleCreateEventEmitter)
 				}
 			}
-			ws.send(`types=${types.join(',')}`)
-		} else {
-			// No valid commands, echo for tunnel testing
-			ws.send(msg)
+		}
+	}
+
+	function removeCreateEventEmitters(typesInput) {
+		for (const nodeId in typesInput) {
+			if (!types[nodeId]) continue
+
+			for (const type of typesInput[nodeId]) {
+				if (types[nodeId].includes(type)) {
+					types[nodeId] = types[nodeId].filter(element => element !== type)
+
+					createEventEmitter.removeListener(
+						`${nodeId}_${type}`,
+						handleCreateEventEmitter
+					)
+				}
+			}
+
+			if (Object.keys(types[nodeId]).length === 0) delete types[nodeId]
+		}
+	}
+
+	ws.on('message', message => {
+		try {
+			const request = JSON.parse(message)
+
+			const response = {
+				type: 'WEBSOCKET_MEASUREMENTS_RX',
+				payload: new Object()
+			}
+
+			if (request.type !== 'WEBSOCKET_MEASUREMENTS_TX') {
+				response.payload.action = 'ERR_INVALID_TYPE'
+			}
+
+			switch (request.payload.action) {
+			case 'ADD_SUBSCRIPTIONS': {
+				addCreateEventEmitters(request.payload.types)
+				response.payload.action = 'ADD_SUBSCRIPTIONS_FULFILLED'
+				response.payload.types = types
+				break
+			}
+
+			case 'REMOVE_SUBSCRIPTIONS': {
+				removeCreateEventEmitters(request.payload.types)
+				response.payload.action = 'REMOVE_SUBSCRIPTIONS_FULFILLED'
+				response.payload.types = types
+				break
+			}
+
+			default: {
+				if (!response.payload.action)
+					response.payload.action = 'ERR_INVALID_ACTION'
+			}
+			}
+
+			ws.send(JSON.stringify(response))
+		} catch (e) {
+			ws.send(JSON.stringify(e))
 		}
 	})
 
 	// Bind correct createEmitter-events to websocket
-	for (const type of typesInput) {
-		addCreateEventEmitter(type)
-	}
+	// for (const nodeId of nodeIdsInput) {
+	// 	for (const type of typesInput) {
+	// 		addCreateEventEmitter(nodeId, type)
+	// 	}
+	// }
 
 	ws.on('close', () => {
-		// We should detach from createEmitter
-		for (const type of types) {
-			removeCreateEventEmitter(type)
-		}
+		// We should detach from createEventEmitter
+		removeCreateEventEmitters(types)
 	})
 }
