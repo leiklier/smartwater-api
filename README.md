@@ -9,7 +9,7 @@ Et enkelt API (Application Programming Interface) for å sende målinger fra [Th
 Målinger som gjøres av sensornoden kan være en av følgende typer (`type`s): 
 
 `
-PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, TEMPERATURE_INSIDE, HUMIDITY, BATTERY, DISSOLVED_OXYGEN
+PH, CONDUCTIVITY, TURBIDITY, TEMPERATURE, TEMPERATURE_INSIDE, HUMIDITY, BATTERY, LID, DISSOLVED_OXYGEN
 `
 
 Dersom det er behov for å legge til støtte for en annen type måling bes dere ta kontakt med meg (Leik Lima-Eriksen).
