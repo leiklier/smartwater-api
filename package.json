@@ -13,7 +13,7 @@
   "body-parser": "^1.18.3",
   "cors": "^2.8.5",
   "events": "^3.0.0",
-  "express": "^4.16.4",
+  "express": "^4.17.3",
   "express-validation": "^1.0.2",
   "express-ws": "^4.0.0",
   "greenlock-express": "^2.6.7",
